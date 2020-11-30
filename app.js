@@ -5,6 +5,8 @@ const { MONGOURI } = require("./keys");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const User = require("./routes/user");
+const Auth = require("./routes/auth");
+const Tours = require("./routes/tours");
 app.use(cors());
 mongoose.connect(MONGOURI, { useNewUrlParser: true, useUnifiedTopology: true });
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -17,6 +19,8 @@ mongoose.connection.on("error", () => {
 });
 
 app.use("/user", User);
+app.use("/auth", Auth);
+app.use("/tour", Tours);
 app.listen(4000, () => {
   console.log("server is running");
 });

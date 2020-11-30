@@ -9,13 +9,9 @@ const userSchema = mongoose.Schema(
       type: String,
       require: true,
     },
-    college: {
+    password: {
       type: String,
-      require: true,
-    },
-    qualification: {
-      type: String,
-      require: true,
+      required: true,
     },
   },
   { timestamps: true }
