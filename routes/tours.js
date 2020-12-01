@@ -3,8 +3,11 @@ const router = express.Router();
 const Tours = require("../models/tours");
 const checkAuth = require("../middleware/requirelogin");
 
-router.get("/alltours", checkAuth, (req, res) => {
+router.get("/alltours/:pageid", (req, res) => {
+  const page = req.params.id;
   Tours.find()
+    .skip(12 * page - 12)
+    .limit(12)
     .then((tour) => {
       if (!tour) {
         res.status(422).json({ message: "no tour exists" });
@@ -15,6 +18,22 @@ router.get("/alltours", checkAuth, (req, res) => {
     .catch((err) => {
       console.log(err);
     });
+});
+router.get("/:id", checkAuth, (req, res) => {
+  const _id = req.params.id;
+  console.log(_id);
+  Tours.findById(_id)
+    .select("city state")
+    .then((result) => {
+      if (!result) {
+        return res.status(422).json({ err: "tour not found" });
+      }
+      res.status(200).json({
+        message: "successful",
+        result: result,
+      });
+    })
+    .catch((err) => console.log(err));
 });
 router.post("/addtour", checkAuth, (req, res) => {
   const { city, state, date, pincode } = req.body;
@@ -43,9 +62,9 @@ router.post("/addtour", checkAuth, (req, res) => {
       .catch((err) => console.log(err));
   }
 });
-router.put("/edittour/:id", (req, res) => {
+router.put("/edittour/:id", checkAuth, (req, res) => {
   const _id = req.params.id;
-  Tours.findById(_id)
+  Tours.find(_id)
     .then((tour) => {
       if (!tour) {
         res.status(422).json({ err: "tour not exists" });
@@ -62,7 +81,7 @@ router.put("/edittour/:id", (req, res) => {
     })
     .catch((err) => console.log(err));
 });
-router.delete("/deletetour/:id", (req, res) => {
+router.delete("/deletetour/:id", checkAuth, (req, res) => {
   const _id = req.params.id;
   Tours.find({ _id: _id })
     .then((tourexists) => {
