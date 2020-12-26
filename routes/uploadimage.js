@@ -5,12 +5,13 @@ const checkAuth = require("../middleware/requirelogin");
 const { response } = require("express");
 
 router.post("/saveimage", (req, res) => {
-  const { image } = req.body;
+  const { image, name } = req.body;
   if (!image) {
     res.status(422).json({ err: "all fields are required to fill" });
   } else {
     const images = new Images({
       image: image,
+      name: name,
     });
     images
       .save()

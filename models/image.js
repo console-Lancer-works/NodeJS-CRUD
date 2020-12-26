@@ -5,6 +5,9 @@ const imageSchema = mongoose.Schema(
       type: String,
       require: true,
     },
+    name: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
